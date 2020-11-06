@@ -1,0 +1,12 @@
+{
+  "entrypoints": {
+    "admin/julekalender": {
+      "css": [
+        "/build/admin/julekalender.80fdffb1.css"
+      ],
+      "js": [
+        "/build/admin/julekalender.9d625a9e.js"
+      ]
+    }
+  }
+}

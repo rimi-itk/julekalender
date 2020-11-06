@@ -1,0 +1,22 @@
+{
+    "devDependencies": {
+        "@symfony/webpack-encore": "^0.31.0",
+        "core-js": "^3.0.0",
+        "dragula": "^3.7.3",
+        "node-sass": "^4.14.1",
+        "regenerator-runtime": "^0.13.2",
+        "sass-loader": "^9.0.1",
+        "standard": "^16.0.1",
+        "webpack-notifier": "^1.6.0"
+    },
+    "license": "UNLICENSED",
+    "private": true,
+    "scripts": {
+        "dev-server": "encore dev-server",
+        "dev": "encore dev",
+        "watch": "encore dev --watch",
+        "build": "encore production --progress",
+        "coding-standards-check": "standard webpack.config.js; cd assets && standard",
+        "coding-standards-apply": "standard --fix webpack.config.js; cd assets && standard --fix"
+    }
+}
