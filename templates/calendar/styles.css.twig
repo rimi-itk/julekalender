@@ -19,40 +19,33 @@
 {% endmacro %}
 
 {% autoescape false %}
-{% if julekalender.image.name|default(false) %}
-{% set background_image = 'url(' ~ ((images_base_url ~ julekalender.image.name)|json_encode(constant('JSON_UNESCAPED_SLASHES'))) ~ ')' %}
-.julekalender {
+{% if calendar.image.name|default(false) %}
+{% set background_image = 'url(' ~ ((images_base_url ~ calendar.image.name)|json_encode(constant('JSON_UNESCAPED_SLASHES'))) ~ ')' %}
+.calendar {
   background-image: {{ background_image }};
-  width: {{ julekalender.image.dimensions[0] }}px;
-  height: {{ julekalender.image.dimensions[1] }}px;
+  width: {{ calendar.image.dimensions[0] }}px;
+  height: {{ calendar.image.dimensions[1] }}px;
 }
 .door__face--front {
   background-image: {{ background_image }};
 }
 {% endif %}
 
-{% for laage in julekalender.laager %}
-{% set config = laage.configurationAsArray %}
+{% for scene in calendar.scenes %}
+{% set config = scene.configurationAsArray %}
 {% if config.style|default(false) %}
 .scene:nth-child({{ loop.index }}) {
 	{{ _self.style(config.style) }}
-{#
-  {{ _self.declaration(config, 'left') }}
-  {{ _self.declaration(config, 'top') }}
-  {{ _self.declaration(config, 'width') }}
-  {{ _self.declaration(config, 'height') }}
-  {{ _self.declaration(config, 'background-color') }}
-#}
 }
 {% endif %}
 
 .scene:nth-child({{ loop.index }}) .door__face--front {
-  background-position: -{{ config.left|default(0) }} -{{ config.top|default(0) }};
+  background-position: -{{ config.style.left|default(0) }} -{{ config.style.top|default(0) }};
 }
 
 .scene:nth-child({{ loop.index }}) .content {
-{% if laage.image.name|default(false) %}
-	{% set background_image = 'url(' ~ ((images_base_url ~ laage.image.name)|json_encode(constant('JSON_UNESCAPED_SLASHES'))) ~ ')' %}
+{% if scene.image.name|default(false) %}
+	{% set background_image = 'url(' ~ ((images_base_url ~ scene.image.name)|json_encode(constant('JSON_UNESCAPED_SLASHES'))) ~ ')' %}
 	{{ _self.style({
 		'background-image': background_image,
 		'background-repeat': 'no-repeat',

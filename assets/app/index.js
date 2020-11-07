@@ -1,12 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Julekalender from './Julekalender'
+import Calendar from './Calendar'
 
-const config = JSON.parse(document.getElementById('julekalender-config').innerText)
+const config = JSON.parse(document.getElementById('calendar-config').innerText)
 
 ReactDOM.render(
   <React.StrictMode>
-    <Julekalender {...config} />
+    <Calendar {...config} />
   </React.StrictMode>,
   document.getElementById('root')
 )

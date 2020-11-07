@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Julekalender;
+use App\Entity\Calendar;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Julekalender|null find($id, $lockMode = null, $lockVersion = null)
- * @method Julekalender|null findOneBy(array $criteria, array $orderBy = null)
- * @method Julekalender[]    findAll()
- * @method Julekalender[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Calendar|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Calendar|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Calendar[]    findAll()
+ * @method Calendar[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class JulekalenderRepository extends ServiceEntityRepository
+class CalendarRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Julekalender::class);
+        parent::__construct($registry, Calendar::class);
     }
 
     // /**
-    //  * @return Julekalender[] Returns an array of Julekalender objects
+    //  * @return Calendar[] Returns an array of Calendar objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class JulekalenderRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Julekalender
+    public function findOneBySomeField($value): ?Calendar
     {
         return $this->createQueryBuilder('j')
             ->andWhere('j.exampleField = :val')

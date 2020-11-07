@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {{ encore_entry_link_tags('app/calendar') }}
+    <link rel="stylesheet" href="{{ path('calendar_styles', {calendar: calendar.id}) }}"/>
+
+    <title>{% block title %}{{ title|default(calendar.title) }}{% endblock %}</title>
+  </head>
+  <body>
+    <div id="root">{{ calendar.title }}</div>
+
+    {% if app.user|default(false) %}
+        <a href="{{ path('admin', {crudAction: 'edit', entityId: calendar.id}) }}">{{ 'Edit calendar'|trans }}</a>
+    {% endif %}
+
+    <script id="calendar-config" type="application/json">{{ config|json_encode|raw }}</script>
+    {{ encore_entry_script_tags('app/calendar') }}
+  </body>
+</html>

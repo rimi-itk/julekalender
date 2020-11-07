@@ -1,0 +1,13 @@
+App\Entity\Calendar:
+  calendar:
+    title: Calendar 2020
+    configuration: |
+      test:
+
+App\Entity\Laage:
+  laage_{1..24}:
+    calendar: '@calendar'
+    position: <current()>
+    content: |
+      <current()>. December
+    configuration: |

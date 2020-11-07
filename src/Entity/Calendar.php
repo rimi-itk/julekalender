@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\JulekalenderRepository;
+use App\Repository\CalendarRepository;
 use DateInterval;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -17,10 +17,10 @@ use Vich\UploaderBundle\Entity\File as EmbeddedFile;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * @ORM\Entity(repositoryClass=JulekalenderRepository::class)
+ * @ORM\Entity(repositoryClass=CalendarRepository::class)
  * @Vich\Uploadable()
  */
-class Julekalender
+class Calendar
 {
     use TimestampableEntity;
 
@@ -38,11 +38,11 @@ class Julekalender
     private $title;
 
     /**
-     * @ORM\OneToMany(targetEntity=Laage::class, mappedBy="julekalender", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Scene::class, mappedBy="calendar", orphanRemoval=true, cascade={"persist"})
      * @ORM\OrderBy({"position": "ASC"})
      * @Assert\Valid()
      */
-    private $laager;
+    private $scenes;
 
     /**
      * @ORM\Embedded(class="Vich\UploaderBundle\Entity\File")
@@ -67,10 +67,10 @@ class Julekalender
     {
         $this->configuration = '# configuration';
         $this->image = new EmbeddedFile();
-        $this->laager = new ArrayCollection();
+        $this->scenes = new ArrayCollection();
         $date = new DateTimeImmutable('1 December');
         for ($i = 0; $i < 24; ++$i) {
-            $laage = (new Laage())
+            $scene = (new Scene())
                 ->setPosition($i)
                 ->setDoNotOpenUntil($date)
                 ->setContent(sprintf('%d. december', $i + 1))
@@ -83,11 +83,11 @@ class Julekalender
                     ],
                     'content' => [
                         'style' => [
-                            'background-color' => '#000000',
+                            'background-color' => '#ffffff',
                         ],
                     ],
                 ], PHP_INT_MAX));
-            $this->addLaager($laage);
+            $this->addScene($scene);
             $date = $date->add(new DateInterval('P1D'));
         }
     }
@@ -110,29 +110,29 @@ class Julekalender
     }
 
     /**
-     * @return Collection|Laage[]
+     * @return Collection|Scene[]
      */
-    public function getLaager(): Collection
+    public function getScenes(): Collection
     {
-        return $this->laager;
+        return $this->scenes;
     }
 
-    public function addLaager(Laage $laage): self
+    public function addScene(Scene $scene): self
     {
-        if (!$this->laager->contains($laage)) {
-            $this->laager[] = $laage;
-            $laage->setJulekalender($this);
+        if (!$this->scenes->contains($scene)) {
+            $this->scenes[] = $scene;
+            $scene->setCalendar($this);
         }
 
         return $this;
     }
 
-    public function removeLaager(Laage $laage): self
+    public function removeScene(Scene $scene): self
     {
-        if ($this->laager->removeElement($laage)) {
+        if ($this->scenes->removeElement($scene)) {
             // set the owning side to null (unless already changed)
-            if ($laage->getJulekalender() === $this) {
-                $laage->setJulekalender(null);
+            if ($scene->getCalendar() === $this) {
+                $scene->setCalendar(null);
             }
         }
 

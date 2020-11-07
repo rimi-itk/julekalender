@@ -2,8 +2,8 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Julekalender;
-use App\Form\LaageType;
+use App\Entity\Calendar;
+use App\Form\SceneType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -16,11 +16,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
-class JulekalenderCrudController extends AbstractCrudController
+class CalendarCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return Julekalender::class;
+        return Calendar::class;
     }
 
     public function configureCrud(Crud $crud): Crud
@@ -39,10 +39,9 @@ class JulekalenderCrudController extends AbstractCrudController
                 ->setFormTypeOptions([
                     'allow_delete' => false,
                 ]),
-            CollectionField::new('laager')
-                ->setLabel('Låger')
+            CollectionField::new('scenes')
                 ->setEntryIsComplex(true)
-                ->setEntryType(LaageType::class),
+                ->setEntryType(SceneType::class),
             DateTimeField::new('createdAt')->onlyOnIndex(),
             DateTimeField::new('UpdatedAt')->onlyOnIndex(),
             TextareaField::new('configuration')->onlyOnForms(),
@@ -52,20 +51,17 @@ class JulekalenderCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         $show = Action::new('Show')
-            ->linkToRoute('julekalender_show', fn (Julekalender $julekalender) => ['julekalender' => $julekalender->getId()]);
-        $layout = Action::new('Layout')
-            ->linkToRoute('julekalender_layout', fn (Julekalender $julekalender) => ['julekalender' => $julekalender->getId()]);
+            ->linkToRoute('calendar_show', fn (Calendar $calendar) => ['calendar' => $calendar->getId()]);
 
         return $actions
             ->add(Crud::PAGE_INDEX, $show)
-            ->add(Crud::PAGE_EDIT, $show)
-            ->add(Crud::PAGE_EDIT, $layout);
+            ->add(Crud::PAGE_EDIT, $show);
     }
 
     public function configureAssets(Assets $assets): Assets
     {
         return $assets
-            ->addCssFile('build/admin/julekalender.css')
-            ->addJsFile('build/admin/julekalender.js');
+            ->addCssFile('build/admin/calendar.css')
+            ->addJsFile('build/admin/calendar.js');
     }
 }

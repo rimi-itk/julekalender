@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Laage;
+use App\Entity\Scene;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Laage|null find($id, $lockMode = null, $lockVersion = null)
- * @method Laage|null findOneBy(array $criteria, array $orderBy = null)
- * @method Laage[]    findAll()
- * @method Laage[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Scene|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Scene|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Scene[]    findAll()
+ * @method Scene[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class LaageRepository extends ServiceEntityRepository
+class SceneRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Laage::class);
+        parent::__construct($registry, Scene::class);
     }
 
     // /**
-    //  * @return Laage[] Returns an array of Laage objects
+    //  * @return Scene[] Returns an array of Scene objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class LaageRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Laage
+    public function findOneBySomeField($value): ?Scene
     {
         return $this->createQueryBuilder('l')
             ->andWhere('l.exampleField = :val')

@@ -1,5 +1,5 @@
 /* global MutationObserver */
-import './julekalender.scss'
+import './calendar.scss'
 
 // @see https://github.com/EasyCorp/EasyAdminBundle/issues/3645#issuecomment-704799541
 const dragula = require('dragula')

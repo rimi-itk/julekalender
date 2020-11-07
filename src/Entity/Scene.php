@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\LaageRepository;
+use App\Repository\SceneRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -14,10 +14,10 @@ use Vich\UploaderBundle\Entity\File as EmbeddedFile;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * @ORM\Entity(repositoryClass=LaageRepository::class)
+ * @ORM\Entity(repositoryClass=SceneRepository::class)
  * @Vich\Uploadable()
  */
-class Laage
+class Scene
 {
     use TimestampableEntity;
 
@@ -48,10 +48,10 @@ class Laage
     private $imageFile;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Julekalender::class, inversedBy="laager")
+     * @ORM\ManyToOne(targetEntity=Calendar::class, inversedBy="scenes")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $julekalender;
+    private $calendar;
 
     /**
      * @ORM\Column(type="integer")
@@ -96,14 +96,14 @@ class Laage
         return $this;
     }
 
-    public function getJulekalender(): ?Julekalender
+    public function getCalendar(): ?Calendar
     {
-        return $this->julekalender;
+        return $this->calendar;
     }
 
-    public function setJulekalender(?Julekalender $julekalender): self
+    public function setCalendar(?Calendar $calendar): self
     {
-        $this->julekalender = $julekalender;
+        $this->calendar = $calendar;
 
         return $this;
     }
