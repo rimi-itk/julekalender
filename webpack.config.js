@@ -24,8 +24,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
   .addEntry('admin/julekalender', './assets/admin/julekalender.js')
-// .addEntry('page1', './assets/page1.js')
-// .addEntry('page2', './assets/page2.js')
+  .addEntry('app/julekalender', './assets/app/index.js')
 
 // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
 // .splitEntryChunks()
@@ -67,7 +66,7 @@ Encore
 // .autoProvidejQuery()
 
 // uncomment if you use API Platform Admin (composer req api-admin)
-// .enableReactPreset()
+  .enableReactPreset()
 // .addEntry('admin', './assets/admin.js')
 
 module.exports = Encore.getWebpackConfig()

@@ -1,0 +1,132 @@
+.scene {
+  position: absolute;
+  //top: 200px;
+  //left: 400px;
+
+  //display: inline-block;
+
+  width: 200px;
+  height: 200px;
+
+  perspective: 600px;
+
+  .content {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    background-color: #eeeeee;
+    //outline: solid 1px red;
+
+    //z-index: 100;
+  }
+
+  .door {
+    position: absolute;
+    //z-index: 200;
+    width: 100%;
+    height: 100%;
+    //position: relative;
+    transition: transform 1s;
+    transform-style: preserve-3d;
+    transform-origin: bottom left;
+
+  }
+
+  .door__face {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    backface-visibility: hidden;
+  }
+
+  .door__face--front {
+    background-image: url('../images/christmas-4661882_1920.jpg');
+
+    $door-border-width: 1px;
+    border: dashed $door-border-width #aaaaaa;
+    box-sizing: content-box;
+    margin: {
+      left: -$door-border-width;
+      top: -$door-border-width;
+    }
+
+    .label {
+      position: absolute;
+      line-height: 1em;
+      right: 10px;
+      bottom: 10px;
+      color: #aaaaaa;
+      font-size: 48px;
+    }
+  }
+
+  .door__face--back {
+    background: white;
+    transform: rotateY(180deg);
+  }
+
+  &.is-open {
+    z-index: 1000;
+
+    .door {
+      transform: rotateY(-92deg);
+      border-color: transparent;
+    }
+  }
+
+  &:nth-child(2n) {
+    .door.is-open {
+      transform: rotateY(-97deg);
+    }
+  }
+
+  @mixin position-scene($x, $y, $width: null, $height: null) {
+      $width: 200px !default;
+      $height: $width !default;
+    left: $x;
+    top: $y;
+    width: $width;
+    height: $height;
+
+    .door__face--front {
+      background-position: (-$x) (-$y);
+    }
+  }
+
+  //$width: 1920px;
+  //$height: 1155px;
+
+  @for $i from 1 through 24 {
+    @debug #{$i} #{($i - 1) % 6};
+    $col: (($i - 1) % 6);
+    $row: ceil($i / 6) - 1;
+    &:nth-child(#{$i}) { @include position-scene(50px + 250px * $col, 50px + 250px * $row); }
+
+  }
+  // &:nth-child( 2) { @include position-scene(300px, 50px); }
+  // &:nth-child( 3) { @include position-scene(550px, 50px); }
+  // &:nth-child( 4) { @include position-scene(400px, 60px); }
+  // &:nth-child( 5) { @include position-scene(400px, 900px); }
+  // // &:nth-child( 6) { @include position-scene(400px, 600px); }
+  // // &:nth-child( 7) { @include position-scene(400px, 600px); }
+  // // &:nth-child( 8) { @include position-scene(400px, 600px); }
+  // // &:nth-child( 9) { @include position-scene(400px, 600px); }
+  // // &:nth-child(10) { @include position-scene(400px, 600px); }
+  // // &:nth-child(11) { @include position-scene(1400px, 200px); }
+  // // &:nth-child(12) { @include position-scene(400px, 600px); }
+  // // &:nth-child(13) { @include position-scene(400px, 600px); }
+  // // &:nth-child(14) { @include position-scene(400px, 600px); }
+  // // &:nth-child(15) { @include position-scene(400px, 600px); }
+  // // &:nth-child(16) { @include position-scene(400px, 600px); }
+  // // &:nth-child(17) { @include position-scene(400px, 600px); }
+  // // &:nth-child(18) { @include position-scene(400px, 600px); }
+  // // &:nth-child(19) { @include position-scene(400px, 600px); }
+  // // &:nth-child(20) { @include position-scene(1400px, 200px); }
+  // // &:nth-child(21) { @include position-scene(400px, 600px); }
+  // // &:nth-child(22) { @include position-scene(400px, 600px); }
+  // &:nth-child(23) { @include position-scene(400px, 200px); }
+  // &:nth-child(24) { @include position-scene(200px, 100px, 200px, 150px); }
+}

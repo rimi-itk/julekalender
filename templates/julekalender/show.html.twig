@@ -1,11 +1,20 @@
-{% extends 'base.html.twig' %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-{% block title %}{{ julekalender.title }}{% endblock %}
+    {{ encore_entry_link_tags('app/julekalender') }}
 
-{% block body %}
-    <h1>{{ julekalender.title }}</h1>
+    <title>{% block title %}{{ title|default(julekalender.title) }}{% endblock %}</title>
+  </head>
+  <body>
+    <div id="root">{{ julekalender.title }}</div>
 
-    {% if app.user|default(true) %}
+    {% if app.user|default(false) %}
         <a href="{{ path('admin', {crudAction: 'edit', entityId: julekalender.id}) }}">{{ 'Edit julekalender'|trans }}</a>
     {%  endif %}
-{% endblock %}
+
+    {{ encore_entry_script_tags('app/julekalender') }}
+  </body>
+</html>
