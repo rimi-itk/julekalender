@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\JulekalenderRepository;
+use DateInterval;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Yaml\Yaml;
 use Vich\UploaderBundle\Entity\File as EmbeddedFile;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -48,7 +51,7 @@ class Julekalender
     private $image;
 
     /**
-     * @Vich\UploadableField(mapping="julekalender", fileNameProperty="image.name", size="image.size", mimeType="image.mimeType", originalName="image.originalName", dimensions="image.dimensions")
+     * @Vich\UploadableField(mapping="images", fileNameProperty="image.name", size="image.size", mimeType="image.mimeType", originalName="image.originalName", dimensions="image.dimensions")
      *
      * @var File
      */
@@ -62,8 +65,31 @@ class Julekalender
 
     public function __construct()
     {
+        $this->configuration = '# configuration';
         $this->image = new EmbeddedFile();
         $this->laager = new ArrayCollection();
+        $date = new DateTimeImmutable('1 December');
+        for ($i = 0; $i < 24; ++$i) {
+            $laage = (new Laage())
+                ->setPosition($i)
+                ->setDoNotOpenUntil($date)
+                ->setContent(sprintf('%d. december', $i + 1))
+                ->setConfiguration(Yaml::dump([
+                    'style' => [
+                        'left' => sprintf('%dpx', 250 * ($i % 6) + 50),
+                        'top' => sprintf('%dpx', 250 * floor($i / 6) + 50),
+                        'width' => '200px',
+                        'height' => '200px',
+                    ],
+                    'content' => [
+                        'style' => [
+                            'background-color' => '#000000',
+                        ],
+                    ],
+                ], PHP_INT_MAX));
+            $this->addLaager($laage);
+            $date = $date->add(new DateInterval('P1D'));
+        }
     }
 
     public function getId(): ?string
@@ -91,22 +117,22 @@ class Julekalender
         return $this->laager;
     }
 
-    public function addLaager(Laage $laager): self
+    public function addLaager(Laage $laage): self
     {
-        if (!$this->laager->contains($laager)) {
-            $this->laager[] = $laager;
-            $laager->setJulekalender($this);
+        if (!$this->laager->contains($laage)) {
+            $this->laager[] = $laage;
+            $laage->setJulekalender($this);
         }
 
         return $this;
     }
 
-    public function removeLaager(Laage $laager): self
+    public function removeLaager(Laage $laage): self
     {
-        if ($this->laager->removeElement($laager)) {
+        if ($this->laager->removeElement($laage)) {
             // set the owning side to null (unless already changed)
-            if ($laager->getJulekalender() === $this) {
-                $laager->setJulekalender(null);
+            if ($laage->getJulekalender() === $this) {
+                $laage->setJulekalender(null);
             }
         }
 
@@ -150,6 +176,15 @@ class Julekalender
     public function getConfiguration(): ?string
     {
         return $this->configuration;
+    }
+
+    public function getConfigurationAsArray(): ?array
+    {
+        try {
+            return Yaml::parse($this->getConfiguration());
+        } catch (ParseException $exception) {
+            return null;
+        }
     }
 
     public function setConfiguration(string $configuration): self

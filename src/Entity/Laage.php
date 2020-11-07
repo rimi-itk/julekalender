@@ -3,16 +3,24 @@
 namespace App\Entity;
 
 use App\Repository\LaageRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
+use Vich\UploaderBundle\Entity\File as EmbeddedFile;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=LaageRepository::class)
+ * @Vich\Uploadable()
  */
 class Laage
 {
+    use TimestampableEntity;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
@@ -25,6 +33,19 @@ class Laage
      * @Assert\NotBlank()
      */
     private $content;
+
+    /**
+     * @ORM\Embedded(class="Vich\UploaderBundle\Entity\File")
+     * @Assert\NotBlank()
+     */
+    private $image;
+
+    /**
+     * @Vich\UploadableField(mapping="images", fileNameProperty="image.name", size="image.size", mimeType="image.mimeType", originalName="image.originalName", dimensions="image.dimensions")
+     *
+     * @var File
+     */
+    private $imageFile;
 
     /**
      * @ORM\ManyToOne(targetEntity=Julekalender::class, inversedBy="laager")
@@ -42,6 +63,21 @@ class Laage
      * @Assert\NotBlank()
      */
     private $configuration;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $doNotOpenUntil;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $openedAt;
+
+    public function __construct()
+    {
+        $this->image = new EmbeddedFile();
+    }
 
     public function getId(): ?string
     {
@@ -101,6 +137,64 @@ class Laage
     public function setConfiguration(?string $configuration): self
     {
         $this->configuration = $configuration;
+
+        return $this;
+    }
+
+    public function getImage(): ?EmbeddedFile
+    {
+        return $this->image;
+    }
+
+    public function setImage(EmbeddedFile $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @param File $imageFile
+     */
+    public function setImageFile(?File $imageFile = null)
+    {
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new DateTimeImmutable();
+        }
+    }
+
+    /**
+     * @return File
+     */
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function getDoNotOpenUntil(): ?\DateTimeInterface
+    {
+        return $this->doNotOpenUntil;
+    }
+
+    public function setDoNotOpenUntil(\DateTimeInterface $doNotOpenUntil): self
+    {
+        $this->doNotOpenUntil = $doNotOpenUntil;
+
+        return $this;
+    }
+
+    public function getOpenedAt(): ?\DateTimeInterface
+    {
+        return $this->openedAt;
+    }
+
+    public function setOpenedAt(?\DateTimeInterface $openedAt): self
+    {
+        $this->openedAt = $openedAt;
 
         return $this;
     }

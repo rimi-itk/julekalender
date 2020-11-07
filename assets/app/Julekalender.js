@@ -1,14 +1,14 @@
-import './App.scss'
+import './Julekalender.scss'
 import { Modal } from 'react-bootstrap'
 import Scene from './component/Scene'
 import React, { useState } from 'react'
 
-function App ({ scenes = [] }) {
+function Julekalender ({ scenes = [] }) {
   const [content, setContent] = useState(null)
 
   return (
     <>
-      <div className='App'>
+      <div className='julekalender'>
         {scenes && scenes.map((scene, index) => (
           <Scene key={`scene-${index}`} setContent={setContent} index={index} {...scene} />
         ))}
@@ -57,4 +57,4 @@ window.addEventListener('resize', resize)
 window.addEventListener('load', resize)
 // resize()
 
-export default App
+export default Julekalender

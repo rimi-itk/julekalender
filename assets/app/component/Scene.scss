@@ -43,8 +43,6 @@
   }
 
   .door__face--front {
-    background-image: url('../images/christmas-4661882_1920.jpg');
-
     $door-border-width: 1px;
     border: dashed $door-border-width #aaaaaa;
     box-sizing: content-box;
@@ -95,38 +93,4 @@
       background-position: (-$x) (-$y);
     }
   }
-
-  //$width: 1920px;
-  //$height: 1155px;
-
-  @for $i from 1 through 24 {
-    @debug #{$i} #{($i - 1) % 6};
-    $col: (($i - 1) % 6);
-    $row: ceil($i / 6) - 1;
-    &:nth-child(#{$i}) { @include position-scene(50px + 250px * $col, 50px + 250px * $row); }
-
-  }
-  // &:nth-child( 2) { @include position-scene(300px, 50px); }
-  // &:nth-child( 3) { @include position-scene(550px, 50px); }
-  // &:nth-child( 4) { @include position-scene(400px, 60px); }
-  // &:nth-child( 5) { @include position-scene(400px, 900px); }
-  // // &:nth-child( 6) { @include position-scene(400px, 600px); }
-  // // &:nth-child( 7) { @include position-scene(400px, 600px); }
-  // // &:nth-child( 8) { @include position-scene(400px, 600px); }
-  // // &:nth-child( 9) { @include position-scene(400px, 600px); }
-  // // &:nth-child(10) { @include position-scene(400px, 600px); }
-  // // &:nth-child(11) { @include position-scene(1400px, 200px); }
-  // // &:nth-child(12) { @include position-scene(400px, 600px); }
-  // // &:nth-child(13) { @include position-scene(400px, 600px); }
-  // // &:nth-child(14) { @include position-scene(400px, 600px); }
-  // // &:nth-child(15) { @include position-scene(400px, 600px); }
-  // // &:nth-child(16) { @include position-scene(400px, 600px); }
-  // // &:nth-child(17) { @include position-scene(400px, 600px); }
-  // // &:nth-child(18) { @include position-scene(400px, 600px); }
-  // // &:nth-child(19) { @include position-scene(400px, 600px); }
-  // // &:nth-child(20) { @include position-scene(1400px, 200px); }
-  // // &:nth-child(21) { @include position-scene(400px, 600px); }
-  // // &:nth-child(22) { @include position-scene(400px, 600px); }
-  // &:nth-child(23) { @include position-scene(400px, 200px); }
-  // &:nth-child(24) { @include position-scene(200px, 100px, 200px, 150px); }
 }

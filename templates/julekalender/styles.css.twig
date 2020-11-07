@@ -1,0 +1,69 @@
+{% macro _declaration(config, property, key=null) %}
+{% autoescape false %}
+{%- if config[key|default(property)] is defined -%}
+  {{ property }}: {{ config[key|default(property)] }};
+{%- endif -%}
+{% endautoescape %}
+{% endmacro %}
+
+{% macro declaration(property, value) %}
+{% autoescape false %}
+  {{ property }}: {{ value }};
+{% endautoescape %}
+{% endmacro %}
+
+{% macro style(declarations) %}
+	{% for property, value in declarations %}
+   {{ _self.declaration(property, value) }}
+	{% endfor %}
+{% endmacro %}
+
+{% autoescape false %}
+{% if julekalender.image.name|default(false) %}
+{% set background_image = 'url(' ~ ((images_base_url ~ julekalender.image.name)|json_encode(constant('JSON_UNESCAPED_SLASHES'))) ~ ')' %}
+.julekalender {
+  background-image: {{ background_image }};
+  width: {{ julekalender.image.dimensions[0] }}px;
+  height: {{ julekalender.image.dimensions[1] }}px;
+}
+.door__face--front {
+  background-image: {{ background_image }};
+}
+{% endif %}
+
+{% for laage in julekalender.laager %}
+{% set config = laage.configurationAsArray %}
+{% if config.style|default(false) %}
+.scene:nth-child({{ loop.index }}) {
+	{{ _self.style(config.style) }}
+{#
+  {{ _self.declaration(config, 'left') }}
+  {{ _self.declaration(config, 'top') }}
+  {{ _self.declaration(config, 'width') }}
+  {{ _self.declaration(config, 'height') }}
+  {{ _self.declaration(config, 'background-color') }}
+#}
+}
+{% endif %}
+
+.scene:nth-child({{ loop.index }}) .door__face--front {
+  background-position: -{{ config.left|default(0) }} -{{ config.top|default(0) }};
+}
+
+.scene:nth-child({{ loop.index }}) .content {
+{% if laage.image.name|default(false) %}
+	{% set background_image = 'url(' ~ ((images_base_url ~ laage.image.name)|json_encode(constant('JSON_UNESCAPED_SLASHES'))) ~ ')' %}
+	{{ _self.style({
+		'background-image': background_image,
+		'background-repeat': 'no-repeat',
+		'background-position': 'center center',
+		'background-size': 'contain',
+	}) }}
+{% endif %}
+{% if config.content.style|default(false) %}
+	{{ _self.style(config.content.style) }}
+{% endif %}
+}
+
+{% endfor %}
+{% endautoescape %}

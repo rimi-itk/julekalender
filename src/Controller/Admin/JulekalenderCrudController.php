@@ -33,17 +33,14 @@ class JulekalenderCrudController extends AbstractCrudController
     {
         return [
             TextField::new('title'),
-//            ImageField::new('image')
-//                ->onlyOnIndex()
-//                ->setBasePath(
-//                    $this->getParameter('app.path.images')
-//                ),
             ImageField::new('imageFile')
                 ->onlyOnForms()
                 ->setFormType(VichImageType::class)
-            //    ->setFormTypeOptions(['required' => true])
-            ,
+                ->setFormTypeOptions([
+                    'allow_delete' => false,
+                ]),
             CollectionField::new('laager')
+                ->setLabel('Låger')
                 ->setEntryIsComplex(true)
                 ->setEntryType(LaageType::class),
             DateTimeField::new('createdAt')->onlyOnIndex(),
@@ -56,15 +53,19 @@ class JulekalenderCrudController extends AbstractCrudController
     {
         $show = Action::new('Show')
             ->linkToRoute('julekalender_show', fn (Julekalender $julekalender) => ['julekalender' => $julekalender->getId()]);
+        $layout = Action::new('Layout')
+            ->linkToRoute('julekalender_layout', fn (Julekalender $julekalender) => ['julekalender' => $julekalender->getId()]);
 
         return $actions
             ->add(Crud::PAGE_INDEX, $show)
-            ->add(Crud::PAGE_EDIT, $show);
+            ->add(Crud::PAGE_EDIT, $show)
+            ->add(Crud::PAGE_EDIT, $layout);
     }
 
     public function configureAssets(Assets $assets): Assets
     {
         return $assets
+            ->addCssFile('build/admin/julekalender.css')
             ->addJsFile('build/admin/julekalender.js');
     }
 }

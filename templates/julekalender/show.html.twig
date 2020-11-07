@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     {{ encore_entry_link_tags('app/julekalender') }}
+    <link rel="stylesheet" href="{{ path('julekalender_styles', {julekalender: julekalender.id}) }}"/>
 
     <title>{% block title %}{{ title|default(julekalender.title) }}{% endblock %}</title>
   </head>

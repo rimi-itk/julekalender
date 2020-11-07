@@ -1,1 +1,24 @@
-@import '~dragula/dist/dragula.css'
+@import '~dragula/dist/dragula.css';
+
+#Julekalender_laager {
+    counter-reset: item-counter 0;
+
+    > .form-group {
+        counter-increment: item-counter 1;
+        position: relative;
+
+        &::before {
+            content: counter(item-counter);
+            position: absolute;
+            right: 0;
+            top: 0;
+            background: red;
+            color: white;
+            text-align: center;
+            line-height: 2em;
+            border-radius: 50%;
+            width: 2em;
+            height: 2em;
+        }
+    }
+}
