@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ julekalender.title }}{% endblock %}
+
+{% block body %}
+    <h1>{{ julekalender.title }}</h1>
+
+    {% if app.user|default(true) %}
+        <a href="{{ path('admin', {crudAction: 'edit', entityId: julekalender.id}) }}">{{ 'Edit julekalender'|trans }}</a>
+    {%  endif %}
+{% endblock %}
