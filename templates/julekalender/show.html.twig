@@ -15,6 +15,7 @@
         <a href="{{ path('admin', {crudAction: 'edit', entityId: julekalender.id}) }}">{{ 'Edit julekalender'|trans }}</a>
     {% endif %}
 
+    <script id="julekalender-config" type="application/json">{{ config|json_encode|raw }}</script>
     {{ encore_entry_script_tags('app/julekalender') }}
   </body>
 </html>

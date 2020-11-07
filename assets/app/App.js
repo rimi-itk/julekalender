@@ -3,14 +3,14 @@ import { Modal } from 'react-bootstrap'
 import Scene from './component/Scene'
 import React, { useState } from 'react'
 
-function App () {
+function App ({ scenes = [] }) {
   const [content, setContent] = useState(null)
 
   return (
     <>
       <div className='App'>
-        {Array(24).fill(null).map((_, index) => (
-          <Scene key={`scene-${index}`} setContent={setContent} index={index} content={`${index + 1}. december`} />
+        {scenes && scenes.map((scene, index) => (
+          <Scene key={`scene-${index}`} setContent={setContent} index={index} {...scene} />
         ))}
       </div>
 

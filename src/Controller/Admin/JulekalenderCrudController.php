@@ -10,7 +10,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class JulekalenderCrudController extends AbstractCrudController
 {
@@ -19,13 +23,32 @@ class JulekalenderCrudController extends AbstractCrudController
         return Julekalender::class;
     }
 
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig');
+    }
+
     public function configureFields(string $pageName): iterable
     {
         return [
             TextField::new('title'),
+//            ImageField::new('image')
+//                ->onlyOnIndex()
+//                ->setBasePath(
+//                    $this->getParameter('app.path.images')
+//                ),
+            ImageField::new('imageFile')
+                ->onlyOnForms()
+                ->setFormType(VichImageType::class)
+            //    ->setFormTypeOptions(['required' => true])
+            ,
             CollectionField::new('laager')
                 ->setEntryIsComplex(true)
                 ->setEntryType(LaageType::class),
+            DateTimeField::new('createdAt')->onlyOnIndex(),
+            DateTimeField::new('UpdatedAt')->onlyOnIndex(),
+            TextareaField::new('configuration')->onlyOnForms(),
         ];
     }
 
