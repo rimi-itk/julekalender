@@ -65,7 +65,7 @@
             "php-cs-fixer --config=.php_cs.dist fix --dry-run"
         ],
         "coding-standards-check/twigcs": [
-            "twigcs lint templates"
+            "twigcs templates"
         ],
         "coding-standards-check": [
             "@coding-standards-check/php-cs-fixer",

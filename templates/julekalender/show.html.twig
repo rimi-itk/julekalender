@@ -13,7 +13,7 @@
 
     {% if app.user|default(false) %}
         <a href="{{ path('admin', {crudAction: 'edit', entityId: julekalender.id}) }}">{{ 'Edit julekalender'|trans }}</a>
-    {%  endif %}
+    {% endif %}
 
     {{ encore_entry_script_tags('app/julekalender') }}
   </body>
