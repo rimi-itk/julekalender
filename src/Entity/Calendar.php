@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CalendarRepository;
+use App\Traits\BlameableEntity;
 use DateInterval;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -23,6 +24,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 class Calendar
 {
+    use BlameableEntity;
     use TimestampableEntity;
 
     /**
@@ -77,11 +79,11 @@ class Calendar
                 ->setDoNotOpenUntil($date)
                 ->setContent(sprintf('%d. december', $i + 1))
                 ->setConfiguration(Yaml::dump([
+                    'x' => sprintf('%dpx', 250 * ($i % 6) + 50),
+                    'y' => sprintf('%dpx', 250 * floor($i / 6) + 50),
+                    'width' => '200px',
+                    'height' => '200px',
                     'style' => [
-                        'left' => sprintf('%dpx', 250 * ($i % 6) + 50),
-                        'top' => sprintf('%dpx', 250 * floor($i / 6) + 50),
-                        'width' => '200px',
-                        'height' => '200px',
                     ],
                     'content' => [
                         'style' => [

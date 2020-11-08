@@ -8,7 +8,9 @@
 
 {% macro declaration(property, value) %}
 {% autoescape false %}
+{% if not value is null %}
   {{ property }}: {{ value }};
+{% endif %}
 {% endautoescape %}
 {% endmacro %}
 
@@ -33,14 +35,17 @@
 
 {% for scene in calendar.scenes %}
 {% set config = scene.configurationAsArray %}
-{% if config.style|default(false) %}
 .scene:nth-child({{ loop.index }}) {
-	{{ _self.style(config.style) }}
+	{{ _self.style(config.style|merge({
+	left: config.x|default(null),
+	top: config.y|default(null),
+	width: config.width|default(null),
+	height: config.height|default(null)
+	})) }}
 }
-{% endif %}
 
 .scene:nth-child({{ loop.index }}) .door__face--front {
-  background-position: -{{ config.style.left|default(0) }} -{{ config.style.top|default(0) }};
+  background-position: -{{ config.x|default(0) }} -{{ config.y|default(0) }};
 }
 
 .scene:nth-child({{ loop.index }}) .content {

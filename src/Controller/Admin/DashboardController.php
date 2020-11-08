@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Calendar;
+use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -30,7 +31,8 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-//        yield MenuItem::linktoDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Calendar', 'fa fa-user', Calendar::class);
+        yield MenuItem::linkToCrud('Calendars', 'fa fa-user', Calendar::class);
+        yield MenuItem::linkToCrud('Users', 'fa fa-user', User::class)
+            ->setPermission('ROLE_ADMIN');
     }
 }

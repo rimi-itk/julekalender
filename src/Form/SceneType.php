@@ -31,9 +31,6 @@ class SceneType extends AbstractType
             ->add('openedAt', DateTimeType::class, [
                 'widget' => 'single_text',
                 'html5' => true,
-                'attr' => [
-                    'readonly' => true,
-                ],
             ])
         ;
     }
