@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
@@ -25,18 +26,21 @@ class Scene
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
+     * @Groups("scene")
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank()
+     * @Groups("scene")
      */
     private $content;
 
     /**
      * @ORM\Embedded(class="Vich\UploaderBundle\Entity\File")
      * @Assert\NotBlank()
+     * @Groups({"scene"})
      */
     private $image;
 
@@ -66,11 +70,13 @@ class Scene
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups("scene")
      */
     private $doNotOpenUntil;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups("scene")
      */
     private $openedAt;
 
