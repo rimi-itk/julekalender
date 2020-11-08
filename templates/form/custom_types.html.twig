@@ -1,0 +1,11 @@
+{% block crop_box_widget %}
+    <div class="crop-box-box-widget" data-options="{{ options|json_encode }}">
+        {{ form_widget(form) }}
+        <button class="btn btn-secondary crop-box-box-select" type="button">{{ 'Select on image'|trans }}</button>
+        <div class="is-cropping">
+            <button class="btn btn-secondary crop-box-box-save" type="button">{{ 'Save'|trans }}</button>
+            <button class="btn btn-secondary crop-box-box-cancel" type="button">{{ 'Cancel'|trans }}</button>
+            <span class="crop-box-box-info">{{ 'Double click to toggle between "crop" and "move"' }}</span>
+        </div>
+    </div>
+{% endblock %}

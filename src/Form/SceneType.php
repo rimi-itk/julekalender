@@ -28,6 +28,9 @@ class SceneType extends AbstractType
             ->add('configuration', YamlType::class, [
                 'required' => true,
             ])
+            ->add('cropBox', CropBoxType::class, [
+                'image_field_selector' => '.field-image',
+            ])
             ->add('openedAt', DateTimeType::class, [
                 'widget' => 'single_text',
                 'html5' => true,

@@ -80,6 +80,11 @@ class Scene
      */
     private $openedAt;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $cropBox;
+
     public function __construct()
     {
         $this->image = new EmbeddedFile();
@@ -201,6 +206,32 @@ class Scene
     public function setOpenedAt(?\DateTimeInterface $openedAt): self
     {
         $this->openedAt = $openedAt;
+
+        return $this;
+    }
+
+    public function getCropBox(): ?string
+    {
+        return $this->cropBox ?? json_encode([
+                'left' => 0,
+                'top' => 0,
+                'width' => 200,
+                'height' => 200,
+            ], JSON_THROW_ON_ERROR);
+    }
+
+    public function getCropBoxAsArray(): ?array
+    {
+        try {
+            return Yaml::parse($this->getCropBox() ?? '');
+        } catch (ParseException $exception) {
+            return null;
+        }
+    }
+
+    public function setCropBox(?string $cropBox): self
+    {
+        $this->cropBox = $cropBox;
 
         return $this;
     }

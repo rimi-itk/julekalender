@@ -47,7 +47,8 @@ class CalendarCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig');
+            ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig')
+            ->addFormTheme('form/custom_types.html.twig');
     }
 
     public function configureFields(string $pageName): iterable

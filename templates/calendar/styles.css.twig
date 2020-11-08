@@ -35,17 +35,22 @@
 
 {% for scene in calendar.scenes %}
 {% set config = scene.configurationAsArray %}
+{% set crop_box = scene.cropBoxAsArray %}
+{% set left = crop_box.left ~ 'px' %}
+{% set top = crop_box.top ~ 'px' %}
+{% set width = crop_box.width ~ 'px' %}
+{% set height = crop_box.height ~ 'px' %}
 .scene:nth-child({{ loop.index }}) {
-	{{ _self.style(config.style|merge({
-	left: config.x|default(null),
-	top: config.y|default(null),
-	width: config.width|default(null),
-	height: config.height|default(null)
+	{{ _self.style(config.style|default({})|merge({
+	left: left,
+	top: top,
+	width: width,
+	height: height
 	})) }}
 }
 
 .scene:nth-child({{ loop.index }}) .door__face--front {
-  background-position: -{{ config.x|default(0) }} -{{ config.y|default(0) }};
+  background-position: -{{ left }} -{{ top }};
 }
 
 .scene:nth-child({{ loop.index }}) .content {

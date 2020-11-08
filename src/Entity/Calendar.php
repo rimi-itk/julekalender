@@ -78,13 +78,13 @@ class Calendar
                 ->setPosition($i)
                 ->setDoNotOpenUntil($date)
                 ->setContent(sprintf('%d. december', $i + 1))
+                ->setCropBox(json_encode([
+                    'left' => 250 * ($i % 6) + 50,
+                    'top' => 250 * floor($i / 6) + 50,
+                    'width' => 200,
+                    'height' => 200,
+                ], JSON_THROW_ON_ERROR))
                 ->setConfiguration(Yaml::dump([
-                    'x' => sprintf('%dpx', 250 * ($i % 6) + 50),
-                    'y' => sprintf('%dpx', 250 * floor($i / 6) + 50),
-                    'width' => '200px',
-                    'height' => '200px',
-                    'style' => [
-                    ],
                     'content' => [
                         'style' => [
                             'background-color' => '#ffffff',
