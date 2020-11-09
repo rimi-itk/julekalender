@@ -12,6 +12,7 @@ Encore
 // public path used by the web server to access the output path
   .setPublicPath('/build')
 
+  .addEntry('admin/admin', './assets/admin/admin.js')
   .addEntry('admin/calendar', './assets/admin/calendar.js')
   .addEntry('app/calendar', './assets/app/index.js')
 
