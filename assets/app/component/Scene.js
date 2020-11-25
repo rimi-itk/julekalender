@@ -24,7 +24,7 @@ const Scene = ({ index, id, content, configuration, openDoor, displayContent, op
 
 const Content = ({ displayContent, index, content }) => (
   <>
-    <div className='content' onClick={() => displayContent({ header: index + 1, body: content })} dangerouslySetInnerHTML={{ __html: content }} />
+    <div className='content' onClick={() => displayContent({ header: index + 1, body: content })}/>
   </>
 )
 
