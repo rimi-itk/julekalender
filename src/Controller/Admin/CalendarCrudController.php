@@ -56,6 +56,7 @@ class CalendarCrudController extends AbstractCrudController
         return [
             TextField::new('title'),
             ImageField::new('imageFile')
+                ->setLabel('Background image')
                 ->onlyOnForms()
                 ->setFormType(VichImageType::class)
                 ->setFormTypeOptions([

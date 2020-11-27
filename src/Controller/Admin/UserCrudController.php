@@ -26,17 +26,6 @@ class UserCrudController extends AbstractCrudController
         return parent::index($context);
     }
 
-    public function edit(AdminContext $context)
-    {
-        $this->denyAccessUnlessGranted(
-            CalendarVoter::EDIT,
-            $context->getEntity()->getInstance(),
-            'You do not have permission to edit this user.'
-        );
-
-        return parent::edit($context);
-    }
-
     public function configureFields(string $pageName): iterable
     {
         return [
