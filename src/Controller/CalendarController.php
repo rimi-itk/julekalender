@@ -63,7 +63,8 @@ class CalendarController extends AbstractController
      */
     public function scenes(Calendar $calendar, SerializerInterface $serializer): Response
     {
-        $data = $serializer->serialize(['data' => $calendar->getScenes()], 'json', ['groups' => 'scene']);
+        $scenes = $calendar->getScenes();
+        $data = $serializer->serialize(['data' => $this->renderScenes($scenes)], 'json', ['groups' => 'scene']);
 
         return JsonResponse::fromJsonString($data);
     }
@@ -122,5 +123,55 @@ class CalendarController extends AbstractController
         );
 
         return $url;
+    }
+
+    private function renderScenes(iterable $scenes): iterable
+    {
+        foreach ($scenes as $scene) {
+            $scene->setContent($this->renderContent($scene));
+        }
+
+        return $scenes;
+    }
+
+    private function renderContent(Scene $scene): string
+    {
+        $content = $scene->getContent();
+
+        $imagesBaseUrl = $this->getParameter('app.images.base_url');
+        if (null !== $scene->getContentImage() && null !== $scene->getContentImage()->getName()) {
+            $imageUrl = $imagesBaseUrl.$scene->getContentImage()->getName();
+            $pattern = '@\{{2}\s*contentImage\s*\}{2}@';
+            $content = preg_replace($pattern, $imageUrl, $content);
+        }
+
+        // YouTube videos.
+        $content = preg_replace(
+            '@https://youtu.be/(?P<id>\S+)@',
+            '<iframe width="560" height="315" src="https://www.youtube.com/embed/\1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
+            $content
+        );
+
+        $content = preg_replace(
+            '@https://www.youtube.com/watch\?v=(?P<id>\S+)@',
+            '<iframe width="560" height="315" src="https://www.youtube.com/embed/\1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
+            $content
+        );
+
+        // Images.
+        $content = preg_replace(
+            '@(?P<url>\S+\.(jpg|png|jfif))@',
+            '<img src="\0"/>',
+            $content
+        );
+
+        // Bare urls.
+        $content = preg_replace(
+            '@(?<!["a-z])([a-z]+://\S+)@',
+            '<a href="\1">\1</a>',
+            $content
+        );
+
+        return $content;
     }
 }

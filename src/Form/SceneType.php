@@ -19,6 +19,11 @@ class SceneType extends AbstractType
             ->add('position', HiddenType::class)
             ->add('content', TextareaType::class, [
                 'required' => true,
+                'attr' => [
+                    'cols' => 1280,
+                    'rows' => 10,
+                ],
+                'help' => 'Use {{ contentImage }} to place the content image.',
             ])
             ->add('contentImageFile', VichImageType::class)
             ->add('doNotOpenUntil', DateTimeType::class, [
