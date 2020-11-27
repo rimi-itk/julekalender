@@ -33,6 +33,11 @@
 }
 {% endif %}
 
+{% set config = calendar.configurationAsArray %}
+{% if config.styles|default(false) %}
+    {{ config.styles|default }}
+{% endif %}
+
 {% for scene in calendar.scenes %}
 {% set config = scene.configurationAsArray %}
 {% set crop_box = scene.cropBoxAsArray %}
