@@ -20,6 +20,7 @@ class SceneType extends AbstractType
             ->add('content', TextareaType::class, [
                 'required' => true,
             ])
+            ->add('contentImageFile', VichImageType::class)
             ->add('doNotOpenUntil', DateTimeType::class, [
                 'widget' => 'single_text',
                 'html5' => true,

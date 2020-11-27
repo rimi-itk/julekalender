@@ -42,6 +42,20 @@ class Scene
      * @Assert\NotBlank()
      * @Groups({"scene"})
      */
+    private $contentImage;
+
+    /**
+     * @Vich\UploadableField(mapping="images", fileNameProperty="contentImage.name", size="contentImage.size", mimeType="contentImage.mimeType", originalName="contentImage.originalName", dimensions="contentImage.dimensions")
+     *
+     * @var File
+     */
+    private $contentImageFile;
+
+    /**
+     * @ORM\Embedded(class="Vich\UploaderBundle\Entity\File")
+     * @Assert\NotBlank()
+     * @Groups({"scene"})
+     */
     private $image;
 
     /**
@@ -150,6 +164,40 @@ class Scene
         $this->configuration = $configuration;
 
         return $this;
+    }
+
+    public function getContentImage(): ?EmbeddedFile
+    {
+        return $this->contentImage;
+    }
+
+    public function setContentImage(EmbeddedFile $contentImage): self
+    {
+        $this->contentImage = $contentImage;
+
+        return $this;
+    }
+
+    /**
+     * @param File $contentImageFile
+     */
+    public function setContentImageFile(?File $contentImageFile = null)
+    {
+        $this->contentImageFile = $contentImageFile;
+
+        if (null !== $contentImageFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new DateTimeImmutable();
+        }
+    }
+
+    /**
+     * @return File
+     */
+    public function getContentImageFile(): ?File
+    {
+        return $this->contentImageFile;
     }
 
     public function getImage(): ?EmbeddedFile
