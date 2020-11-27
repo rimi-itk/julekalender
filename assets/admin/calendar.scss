@@ -2,40 +2,40 @@
 @import '~cropperjs';
 
 #Calendar_scenes {
-    counter-reset: item-counter 0;
+  counter-reset: item-counter 0;
 
-    > .form-group {
-        counter-increment: item-counter 1;
-        position: relative;
+  > .form-group {
+    counter-increment: item-counter 1;
+    position: relative;
 
-        &::before {
-            content: counter(item-counter);
-            position: absolute;
-            right: 0;
-            top: 0;
-            background: red;
-            color: white;
-            text-align: center;
-            line-height: 2em;
-            border-radius: 50%;
-            width: 2em;
-            height: 2em;
-        }
+    &::before {
+      content: counter(item-counter);
+      position: absolute;
+      right: 0;
+      top: 0;
+      background: red;
+      color: white;
+      text-align: center;
+      line-height: 2em;
+      border-radius: 50%;
+      width: 2em;
+      height: 2em;
     }
+  }
 }
 
 .crop-box-box-widget {
+  .is-cropping {
+    display: none;
+  }
+
+  &.is-cropping {
+    .crop-box-box-select {
+      display: none;
+    }
+
     .is-cropping {
-        display: none;
+      display: initial;
     }
-
-    &.is-cropping {
-        .crop-box-box-select {
-            display: none;
-        }
-
-        .is-cropping {
-            display: initial;
-        }
-    }
+  }
 }

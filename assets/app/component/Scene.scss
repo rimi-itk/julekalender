@@ -82,8 +82,8 @@
   }
 
   @mixin position-scene($x, $y, $width: null, $height: null) {
-      $width: 200px !default;
-      $height: $width !default;
+    $width: 200px !default;
+    $height: $width !default;
     left: $x;
     top: $y;
     width: $width;

@@ -5,27 +5,27 @@
 }
 
 #edit-calendar {
-    background-color: #000000;
-    color: #eeeeee;
-    position: absolute;
-    right: 0;
-    bottom: 0;
+  background-color: #000000;
+  color: #eeeeee;
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }
 
 // @see https://stackoverflow.com/a/34308180
 body .modal-dialog { /* Width */
-    max-width: 100%;
-    width: auto !important;
-    display: inline-block;
+  max-width: 100%;
+  width: auto !important;
+  display: inline-block;
 }
 
 .modal {
-    z-index: -1;
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
+  z-index: -1;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-open .modal {
-    z-index: 1050;
+  z-index: 1050;
 }
