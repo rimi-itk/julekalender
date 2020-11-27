@@ -24,6 +24,7 @@ class SceneType extends AbstractType
                     'rows' => 10,
                 ],
                 'help' => 'Use {{ contentImage }} to place the content image.',
+                'empty_data' => '',
             ])
             ->add('contentImageFile', VichImageType::class)
             ->add('doNotOpenUntil', DateTimeType::class, [

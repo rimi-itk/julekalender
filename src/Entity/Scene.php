@@ -39,7 +39,6 @@ class Scene
 
     /**
      * @ORM\Embedded(class="Vich\UploaderBundle\Entity\File")
-     * @Assert\NotBlank()
      * @Groups({"scene"})
      */
     private $contentImage;
@@ -53,7 +52,6 @@ class Scene
 
     /**
      * @ORM\Embedded(class="Vich\UploaderBundle\Entity\File")
-     * @Assert\NotBlank()
      * @Groups({"scene"})
      */
     private $image;
@@ -78,7 +76,6 @@ class Scene
 
     /**
      * @ORM\Column(type="text")
-     * @Assert\NotBlank()
      */
     private $configuration;
 
