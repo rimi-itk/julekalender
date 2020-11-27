@@ -158,6 +158,20 @@ class CalendarController extends AbstractController
             $content
         );
 
+        // Image toggle.
+        $content = preg_replace_callback(
+            '@\[image-toggle\s+(\S+)\s+(\S+)\]@',
+            static function ($matches) {
+                $id = sha1(uniqid('', true));
+                $imageUrls = [$matches[1], $matches[2]];
+                return <<<HTML
+<img src="{$imageUrls[0]}" id="{$id}-1" onclick="document.getElementById('{$id}-1').style.display = 'none'; document.getElementById('{$id}-2').style.display = 'initial'"/>
+<img src="{$imageUrls[1]}" id="{$id}-2" style="display: none" onclick="document.getElementById('{$id}-2').style.display = 'none'; document.getElementById('{$id}-1').style.display = 'initial'"/>
+HTML;
+            },
+            $content,
+        );
+
         // Images.
         $content = preg_replace(
             '@(?P<url>\S+\.(jpg|png|jfif))@',

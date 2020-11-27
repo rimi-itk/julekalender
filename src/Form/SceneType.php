@@ -23,8 +23,11 @@ class SceneType extends AbstractType
                     'cols' => 1280,
                     'rows' => 10,
                 ],
-                'help' => 'Use {{ contentImage }} to place the content image.',
                 'empty_data' => '',
+                'help' => <<<'HELP'
+Use <code>{{ contentImage }}</code> to place the content image.
+Use <code>[image-toggle «image url» «image url»]</code> to toggle between two images.
+HELP
             ])
             ->add('contentImageFile', VichImageType::class)
             ->add('doNotOpenUntil', DateTimeType::class, [
