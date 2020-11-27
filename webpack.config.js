@@ -14,6 +14,7 @@ Encore
 
   .addEntry('admin/admin', './assets/admin/admin.js')
   .addEntry('admin/calendar', './assets/admin/calendar.js')
+  .addEntry('admin/calendar/lay_out', './assets/admin/calendar/lay_out.js')
   .addEntry('app/calendar', './assets/app/index.js')
 
   .disableSingleRuntimeChunk()
