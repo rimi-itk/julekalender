@@ -98,6 +98,7 @@ class Scene
 
     public function __construct()
     {
+        $this->contentImage = new EmbeddedFile();
         $this->image = new EmbeddedFile();
     }
 
