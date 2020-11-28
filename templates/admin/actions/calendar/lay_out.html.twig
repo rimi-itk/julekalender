@@ -1,0 +1,77 @@
+{% extends '@EasyAdmin/layout.html.twig' %}
+
+{% block content %}
+    {% form_theme form '@EasyAdmin/crud/form_theme.html.twig' %}
+
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col">
+        {{ form_row(form.columns) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.width) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.height) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.shuffle) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {{ form_row(form.layOut) }}
+        </div>
+        <div class="col">
+            <div class="float-right">
+            {{ form_row(form.save) }}
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+
+    <div id="scenes">
+        {% for scene in calendar.scenes %}
+            <div class="scene">{{ loop.index }}</div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block body_javascript %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('admin/calendar/lay_out') }}
+{% endblock %}
+
+{% block head_stylesheets %}
+     {{ parent() }}
+<style>
+         #scenes {
+             width: {{ calendar.image.dimensions[0] }}px;
+             height: {{ calendar.image.dimensions[1] }}px;
+             position: relative;
+             background-image: url({{ images_base_url ~ calendar.image.name }});
+             background-repeat: no-repeat;
+         }
+
+         #scenes .scene {
+             position: absolute;
+             outline: solid 1px red;
+             color: red;
+             font-size: 200%;
+             text-align: center;
+         }
+
+         {#
+         {% for crop_box in crop_boxes %}
+         #scenes .crop-box:nth-child({{ loop.index }}) {
+             left: {{ crop_box.left }}px;
+             top: {{ crop_box.top }}px;
+             width: {{ crop_box.width }}px;
+             height: {{ crop_box.height }}px;
+             line-height: {{ crop_box.height }}px;
+         }
+         {% endfor %}
+#}
+     </style>
+
+{% endblock %}

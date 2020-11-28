@@ -3,6 +3,10 @@
   --body-max-width: 100%;
 }
 
+.content-header .page-actions a {
+    margin-left: 10px;
+}
+
 // Form tweaks.
 .field-checkbox .form-widget, .form-group.field-collection-action {
   margin-left: calc(16% + 5px);
