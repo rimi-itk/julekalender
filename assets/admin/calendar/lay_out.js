@@ -32,6 +32,14 @@ const showScenes = () => {
   })
 }
 
+const getCropBoxes = () => {
+  return JSON.parse(document.getElementById('form_cropBoxes').value)
+}
+const setCropBoxes = (cropBoxes) => {
+  document.getElementById('form_cropBoxes').value = JSON.stringify(cropBoxes)
+  showScenes()
+}
+
 const layOut = () => {
   const columns = parseInt(document.getElementById('form_columns').value)
   const sceneWidth = parseInt(document.getElementById('form_width').value)
@@ -61,10 +69,44 @@ const layOut = () => {
     shuffle(cropBoxes)
   }
 
-  document.getElementById('form_cropBoxes').value = JSON.stringify(cropBoxes)
-  showScenes()
+  setCropBoxes(cropBoxes)
 }
 
 window.addEventListener('load', showScenes)
 
 document.getElementById('form_layOut').addEventListener('click', layOut)
+
+scenes.forEach(scene => {
+  scene.setAttribute('draggable', 'true')
+  scene.addEventListener('dragstart', event => {
+    event.dataTransfer.setData('start-drag', JSON.stringify({
+      index: event.target.dataset.index,
+      clientX: event.clientX,
+      clientY: event.clientY
+    }))
+  })
+})
+
+const container = document.getElementById('scenes')
+
+container.addEventListener('dragover', event => {
+  event.preventDefault()
+})
+
+container.addEventListener('drop', event => {
+  const {
+    index,
+    clientX: startClientX,
+    clientY: startClientY
+  } = JSON.parse(event.dataTransfer.getData('start-drag'))
+
+  const cropBoxes = getCropBoxes()
+  const cropBox = cropBoxes[index] ?? null
+  const offset = [event.clientX - startClientX, event.clientY - startClientY]
+  cropBox.left += offset[0]
+  cropBox.top += offset[1]
+  cropBoxes[index] = cropBox
+  setCropBoxes(cropBoxes)
+
+  showScenes()
+})

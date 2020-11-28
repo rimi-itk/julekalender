@@ -32,7 +32,7 @@
 
     <div id="scenes">
         {% for scene in calendar.scenes %}
-            <div class="scene">{{ loop.index }}</div>
+            <div data-index="{{ loop.index0 }}" class="scene">{{ loop.index }}</div>
         {% endfor %}
     </div>
 {% endblock %}
@@ -60,18 +60,6 @@
              font-size: 200%;
              text-align: center;
          }
-
-         {#
-         {% for crop_box in crop_boxes %}
-         #scenes .crop-box:nth-child({{ loop.index }}) {
-             left: {{ crop_box.left }}px;
-             top: {{ crop_box.top }}px;
-             width: {{ crop_box.width }}px;
-             height: {{ crop_box.height }}px;
-             line-height: {{ crop_box.height }}px;
-         }
-         {% endfor %}
-#}
      </style>
 
 {% endblock %}
