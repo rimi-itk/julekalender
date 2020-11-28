@@ -115,7 +115,7 @@ class CalendarCrudController extends AbstractCrudController
                 'data' => 6,
             ])
             ->add('width', IntegerType::class, [
-                'data' => 300,
+                'data' => 200,
             ])
             ->add('height', IntegerType::class, [
                 'data' => 200,
