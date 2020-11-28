@@ -89,19 +89,9 @@ const resize = e => {
   if (app) {
     const scaleX = window.innerWidth / app.offsetWidth
     const scaleY = window.innerHeight / app.offsetHeight
-    const scale = Math.min(scaleX, scaleY)
-
-    console.log(scaleX, scaleY, scale)
+    const scale = Math.min(scaleX, scaleY, 1)
 
     app.style.transform = `scale(${scale})`
-    // app.style.transformOrigin = `left -${app.offsetHeight/2}px`
-    app.style.transformOrigin = window.innerWidth / window.innerHeight < app.offsetWidth / app.offsetHeight
-      ? `left ${scale * window.innerHeight - scaleY * app.offsetHeight}px`
-      : `${window.innerWidth - scaleY * app.offsetWidth}px top`
-
-    app.parentNode.style.width = `${scale * app.offsetWidth}px`
-    app.parentNode.style.height = `${scale * app.offsetHeight}px`
-    document.body.style.overflow = 'hidden'
   }
 }
 

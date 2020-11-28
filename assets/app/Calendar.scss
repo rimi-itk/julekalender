@@ -1,5 +1,21 @@
 @import "~bootstrap";
 
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+#root {
+   height: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
 .calendar {
   overflow: hidden;
 }
