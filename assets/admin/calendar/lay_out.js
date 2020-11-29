@@ -1,4 +1,32 @@
+import './lay_out.scss'
+
 const scenes = document.querySelectorAll('.scene')
+
+const getCropBoxes = () => {
+  return JSON.parse(document.getElementById('form_cropBoxes').value)
+}
+
+const cropBoxesHistory = [getCropBoxes()]
+
+const setCropBoxes = (cropBoxes, noHistory = false) => {
+  if (!noHistory) {
+    cropBoxesHistory.push(cropBoxes)
+  }
+  console.log({ cropBoxesHistory })
+  document.getElementById('form_cropBoxes').value = JSON.stringify(cropBoxes)
+  showScenes()
+}
+
+const undo = document.getElementById('undo')
+
+undo.addEventListener('click', event => {
+  if (cropBoxesHistory.length > 1) {
+    console.log(cropBoxesHistory)
+    cropBoxesHistory.pop()
+    console.log(cropBoxesHistory)
+    setCropBoxes(cropBoxesHistory[cropBoxesHistory.length - 1], true)
+  }
+})
 
 // @see https://stackoverflow.com/a/2450976
 const shuffle = (array) => {
@@ -20,7 +48,7 @@ const shuffle = (array) => {
 }
 
 const showScenes = () => {
-  const cropBoxes = JSON.parse(document.getElementById('form_cropBoxes').value)
+  const cropBoxes = getCropBoxes()
   scenes.forEach((scene, index) => {
     const cropBox = cropBoxes[index] ?? null
     if (cropBox) {
@@ -30,14 +58,8 @@ const showScenes = () => {
       scene.style.height = cropBox.height + 'px'
     }
   })
-}
 
-const getCropBoxes = () => {
-  return JSON.parse(document.getElementById('form_cropBoxes').value)
-}
-const setCropBoxes = (cropBoxes) => {
-  document.getElementById('form_cropBoxes').value = JSON.stringify(cropBoxes)
-  showScenes()
+  undo.style.visibility = cropBoxesHistory.length > 1 ? 'visible' : 'hidden'
 }
 
 const layOut = () => {
@@ -77,13 +99,28 @@ window.addEventListener('load', showScenes)
 document.getElementById('form_layOut').addEventListener('click', layOut)
 
 scenes.forEach(scene => {
-  scene.setAttribute('draggable', 'true')
-  scene.addEventListener('dragstart', event => {
+  const dragger = scene.querySelector('.label')
+  dragger.setAttribute('draggable', 'true')
+  dragger.addEventListener('dragstart', event => {
     event.dataTransfer.setData('start-drag', JSON.stringify({
-      index: event.target.dataset.index,
+      type: 'move',
+      index: scene.dataset.index,
       clientX: event.clientX,
       clientY: event.clientY
     }))
+  })
+
+  const corners = scene.querySelectorAll('.corner')
+  corners.forEach(corner => {
+    corner.setAttribute('draggable', 'true')
+    corner.addEventListener('dragstart', event => {
+      event.dataTransfer.setData('start-drag', JSON.stringify({
+        type: 'resize ' + corner.classList,
+        index: scene.dataset.index,
+        clientX: event.clientX,
+        clientY: event.clientY
+      }))
+    })
   })
 })
 
@@ -94,19 +131,41 @@ container.addEventListener('dragover', event => {
 })
 
 container.addEventListener('drop', event => {
-  const {
-    index,
-    clientX: startClientX,
-    clientY: startClientY
-  } = JSON.parse(event.dataTransfer.getData('start-drag'))
+  if (event.dataTransfer.getData('start-drag')) {
+    const {
+      type,
+      index,
+      clientX: startClientX,
+      clientY: startClientY
+    } = JSON.parse(event.dataTransfer.getData('start-drag'))
 
-  const cropBoxes = getCropBoxes()
-  const cropBox = cropBoxes[index] ?? null
-  const offset = [event.clientX - startClientX, event.clientY - startClientY]
-  cropBox.left += offset[0]
-  cropBox.top += offset[1]
-  cropBoxes[index] = cropBox
-  setCropBoxes(cropBoxes)
+    const cropBoxes = getCropBoxes()
+    const cropBox = cropBoxes[index] ?? null
+    if (cropBox) {
+      const offset = [event.clientX - startClientX, event.clientY - startClientY]
+      if (type.indexOf('move') === 0) {
+        cropBox.left += offset[0]
+        cropBox.top += offset[1]
+        cropBoxes[index] = cropBox
+      } else if (type.indexOf('resize') === 0) {
+        if (type.indexOf('left') > -1) {
+          cropBox.left += offset[0]
+          cropBox.width -= offset[0]
+        } else if (type.indexOf('right') > -1) {
+          cropBox.width += offset[0]
+        }
+        if (type.indexOf('top') > -1) {
+          cropBox.top += offset[1]
+          cropBox.height -= offset[1]
+        } else if (type.indexOf('bottom') > -1) {
+          cropBox.height += offset[1]
+        }
+      }
 
-  showScenes()
+      setCropBoxes(cropBoxes)
+      showScenes()
+    }
+  }
 })
+
+document.querySelector('form').addEventListener('reset', event => { showScenes() })

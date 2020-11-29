@@ -5,26 +5,35 @@
 
     {{ form_start(form) }}
     <div class="row">
-        <div class="col">
+        <div class="col-3">
         {{ form_row(form.columns) }}
         </div>
-        <div class="col">
+        <div class="col-3">
             {{ form_row(form.width) }}
         </div>
-        <div class="col">
+        <div class="col-3">
             {{ form_row(form.height) }}
         </div>
-        <div class="col">
+        <div class="col-1">
             {{ form_row(form.shuffle) }}
+        </div>
+        <div class="col-2">
+            <div class="float-right">
+                {{ form_row(form.layOut) }}
+            </div>
         </div>
     </div>
     <div class="row">
         <div class="col">
-            {{ form_row(form.layOut) }}
+            <div class="form-group field-button ">
+                <button type="button" id="undo" class="btn-secondary btn">Undo</button>
+                {# <button type="button" id="redo" class="btn-secondary btn">Redo</button>#}
+            </div>
+
         </div>
         <div class="col">
             <div class="float-right">
-            {{ form_row(form.save) }}
+                {{ form_row(form.save) }}
             </div>
         </div>
     </div>
@@ -32,7 +41,15 @@
 
     <div id="scenes">
         {% for scene in calendar.scenes %}
-            <div data-index="{{ loop.index0 }}" class="scene">{{ loop.index }}</div>
+            <div class="scene-wrapper" data-index="{{ loop.index0 }}">
+                <div class="scene" data-index="{{ loop.index0 }}">
+                    <span class="label">{{ loop.index }}</span>
+                    <div class="corner left top"></div>
+                    <div class="corner right top"></div>
+                    <div class="corner left bottom"></div>
+                    <div class="corner right bottom"></div>
+                </div>
+            </div>
         {% endfor %}
     </div>
 {% endblock %}
@@ -43,23 +60,13 @@
 {% endblock %}
 
 {% block head_stylesheets %}
-     {{ parent() }}
-<style>
-         #scenes {
-             width: {{ calendar.image.dimensions[0] }}px;
-             height: {{ calendar.image.dimensions[1] }}px;
-             position: relative;
-             background-image: url({{ images_base_url ~ calendar.image.name }});
-             background-repeat: no-repeat;
-         }
-
-         #scenes .scene {
-             position: absolute;
-             outline: solid 1px red;
-             color: red;
-             font-size: 200%;
-             text-align: center;
-         }
-     </style>
-
+    {{ parent() }}
+    {{ encore_entry_link_tags('admin/calendar/lay_out') }}
+    <style>
+        #scenes {
+            width: {{ calendar.image.dimensions[0] }}px;
+            height: {{ calendar.image.dimensions[1] }}px;
+            background-image: url({{ images_base_url ~ calendar.image.name }});
+        }
+    </style>
 {% endblock %}

@@ -121,7 +121,8 @@ class CalendarCrudController extends AbstractCrudController
                 'data' => 200,
             ])
             ->add('shuffle', CheckboxType::class, [
-                'data' => true,
+                'required' => false,
+                'data' => false,
             ])
             ->add('cropBoxes', HiddenType::class, [
                 'required' => false,

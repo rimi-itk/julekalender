@@ -1,0 +1,72 @@
+#scenes {
+  position: relative;
+  background-repeat: no-repeat;
+
+  .scene-wrapper {
+
+    $corner-width: 10px;
+
+    .scene {
+      position: absolute;
+      outline: solid 1px red;
+      color: red;
+      font-size: 200%;
+      text-align: center;
+      z-index: 10;
+    }
+
+    .label {
+      cursor: move;
+
+      position: absolute;
+      top: 0; //$corner-width / 2;
+      left: 0; //$corner-width / 2;
+      bottom: 0; //$corner-width / 2;
+      right: 0; //$corner-width / 2;
+      background: yellow;
+      opacity: .5;
+    }
+
+    .corner {
+      position: absolute;
+      width: $corner-width;
+      height: $corner-width;
+      border-radius: 50%;
+      background: red;
+      z-index: 100;
+
+      &.top {
+        top: -$corner-width / 2;
+      }
+
+      &.left {
+        left: -$corner-width / 2;
+      }
+
+      &.bottom {
+        bottom: -$corner-width / 2;
+      }
+
+      &.right {
+        right: -$corner-width / 2;
+      }
+
+      &.top.left {
+        cursor: nw-resize;
+      }
+
+      &.bottom.right {
+        cursor: se-resize;
+      }
+
+      &.top.right {
+        cursor: ne-resize;
+      }
+
+      &.bottom.left {
+        cursor: sw-resize;
+      }
+
+    }
+  }
+}
