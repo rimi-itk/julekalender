@@ -145,20 +145,18 @@ class CalendarController extends AbstractController
             $content = preg_replace($pattern, $imageUrl, $content);
         }
 
-        // YouTube videos.
-        $content = preg_replace(
-            '@https://youtu.be/(?P<id>\S+)@',
-            '<iframe width="560" height="315" src="https://www.youtube.com/embed/\1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
-            $content
+        // [reveal url url]
+        $content = preg_replace_callback(
+            '@\[reveal\s+(\S+)\s+(\S+)\]@',
+            static function ($matches) {
+                return <<<HTML
+<div class="reveal"><div onclick="this.parentNode.firstChild.style.display = 'none'; this.parentNode.lastChild.style.display = 'initial'">${matches[1]}</div><div style="display: none">${matches[2]}</div></div>
+HTML;
+            },
+            $content,
         );
 
-        $content = preg_replace(
-            '@https://www.youtube.com/watch\?v=(?P<id>\S+)@',
-            '<iframe width="560" height="315" src="https://www.youtube.com/embed/\1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
-            $content
-        );
-
-        // Image toggle.
+        // [image-toggle url url]
         $content = preg_replace_callback(
             '@\[image-toggle\s+(\S+)\s+(\S+)\]@',
             static function ($matches) {
@@ -166,23 +164,36 @@ class CalendarController extends AbstractController
                 $imageUrls = [$matches[1], $matches[2]];
 
                 return <<<HTML
-<img src="{$imageUrls[0]}" id="{$id}-1" onclick="document.getElementById('{$id}-1').style.display = 'none'; document.getElementById('{$id}-2').style.display = 'initial'"/>
-<img src="{$imageUrls[1]}" id="{$id}-2" style="display: none" onclick="document.getElementById('{$id}-2').style.display = 'none'; document.getElementById('{$id}-1').style.display = 'initial'"/>
+<div class="toggle"><div onclick="this.parentNode.firstChild.style.display = 'none'; this.parentNode.lastChild.style.display = 'initial'">${matches[1]}</div><div onclick="this.parentNode.firstChild.style.display = 'initial'; this.parentNode.lastChild.style.display = 'none'" style="display: none">${matches[2]}</div></div>
 HTML;
             },
             $content,
         );
 
+        // YouTube videos.
+        $content = preg_replace(
+            '@https://youtu.be/(?P<id>[A-Za-z0-9]+)@',
+            '<iframe width="560" height="315" src="https://www.youtube.com/embed/\1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
+            $content
+        );
+
+        $content = preg_replace(
+            '@https://www.youtube.com/watch\?v=(?P<id>[A-Za-z0-9]+)@',
+            '<iframe width="560" height="315" src="https://www.youtube.com/embed/\1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
+            $content
+        );
+
         // Images.
         $content = preg_replace(
-            '@(?P<url>\S+\.(jpg|png|jfif))@',
+            // '@(?<!["a-z])([a-z]+://[A-Za-z0-9._~:/?#\[\]\@!$&\'()*+,;%=-]+)@',
+            '@(?P<url>[A-Za-z0-9._~:/?#\[\]\@!$&\'()*+,;%=-]+\.(jpg|png|jfif))@',
             '<img src="\0"/>',
             $content
         );
 
         // Bare urls.
         $content = preg_replace(
-            '@(?<!["a-z])([a-z]+://\S+)@',
+            '@(?<!["a-z])([a-z]+://[A-Za-z0-9._~:/?#\[\]\@!$&\'()*+,;%=-]+)@',
             '<a href="\1">\1</a>',
             $content
         );

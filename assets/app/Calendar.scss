@@ -40,6 +40,11 @@ body .modal-dialog { /* Width */
   display: flex !important;
   justify-content: center;
   align-items: center;
+
+  img {
+    max-width: 80vw;
+    max-height: 80vh;
+  }
 }
 
 .modal-open .modal {

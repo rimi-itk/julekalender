@@ -27,6 +27,7 @@ class SceneType extends AbstractType
                 'help' => <<<'HELP'
 Use <code>{{ contentImage }}</code> to place the content image.
 Use <code>[image-toggle «image url» «image url»]</code> to toggle between two images.
+Use <code>[reveal «image url» «url»]</code> to reveal content when clicking an image.
 HELP
             ])
             ->add('contentImageFile', VichImageType::class)
