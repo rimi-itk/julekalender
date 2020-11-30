@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Calendar;
 use App\Entity\Scene;
-use App\Repository\CalendarRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,26 +14,15 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/calendar")
- */
 class CalendarController extends AbstractController
 {
     /**
-     * @Route("")
-     */
-    public function index(CalendarRepository $repository): Response
-    {
-        return $this->show($repository->findOneBy([]));
-    }
-
-    /**
-     * @Route("/{calendar}", name="calendar_show")
+     * @Route("/{slug}", name="calendar_show", requirements={"slug": "^(?!admin|login|logout)[^/]+"})
      */
     public function show(Calendar $calendar): Response
     {
         $config = [
-            'data_url' => $this->generateUrl('calendar_scenes', ['calendar' => $calendar->getId()]),
+            'data_url' => $this->generateUrl('calendar_scenes', ['slug' => $calendar->getSlug()]),
             'scene_open_url_template' => $this->generateUrl('calendar_scenes_open', ['calendar' => $calendar->getId(), 'scene' => '{{ id }}']),
         ];
 
@@ -52,7 +40,7 @@ class CalendarController extends AbstractController
     }
 
     /**
-     * @Route("/{calendar}/styles", name="calendar_styles")
+     * @Route("/{slug}/styles", name="calendar_styles", requirements={"slug": "^(?!admin|login|logout)[^/]+"})
      */
     public function styles(Calendar $calendar): Response
     {
@@ -66,7 +54,7 @@ class CalendarController extends AbstractController
     }
 
     /**
-     * @Route("/{calendar}/scenes", name="calendar_scenes")
+     * @Route("/{slug}/scenes", name="calendar_scenes", requirements={"slug": "^(?!admin|login|logout)[^/]+"})
      */
     public function scenes(Calendar $calendar, SerializerInterface $serializer): Response
     {

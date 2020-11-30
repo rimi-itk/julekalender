@@ -65,6 +65,7 @@ class CalendarCrudController extends AbstractCrudController
     {
         return [
             TextField::new('title'),
+            TextField::new('slug'),
             ImageField::new('imageFile')
                 ->setLabel('Background image')
                 ->onlyOnForms()
@@ -94,7 +95,7 @@ class CalendarCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         $show = Action::new('Show')
-            ->linkToRoute('calendar_show', fn (Calendar $calendar) => ['calendar' => $calendar->getId()]);
+            ->linkToRoute('calendar_show', fn (Calendar $calendar) => ['slug' => $calendar->getSlug()]);
         $layOut = Action::new('LayOut')
             ->addCssClass('btn')
             ->addCssClass('btn-secondary')
