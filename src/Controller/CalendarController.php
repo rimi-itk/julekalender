@@ -13,9 +13,18 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 class CalendarController extends AbstractController
 {
+    /** @var UploaderHelper */
+    private $uploaderHelper;
+
+    public function __construct(UploaderHelper $uploaderHelper)
+    {
+        $this->uploaderHelper = $uploaderHelper;
+    }
+
     /**
      * @Route("/{slug}", name="calendar_show", requirements={"slug": "^(?!admin|login|logout)[^/]+"})
      */
@@ -27,9 +36,7 @@ class CalendarController extends AbstractController
         ];
 
         if ($calendar->getAudio()) {
-            $audioBaseUrl = $this->getParameter('app.audio.base_url');
-
-            $config['audio_url'] = $audioBaseUrl.'/'.$calendar->getAudio();
+            $config['audio_url'] = $this->uploaderHelper->asset($calendar, 'audioFile');
             $config['audio_loop'] = $calendar->getAudioLoop();
         }
 
@@ -48,7 +55,6 @@ class CalendarController extends AbstractController
         $response->headers->set('content-type', 'text/css');
 
         return $this->render('calendar/styles.css.twig', [
-            'images_base_url' => $this->getParameter('app.images.base_url'),
             'calendar' => $calendar,
         ], $response);
     }
@@ -133,11 +139,12 @@ class CalendarController extends AbstractController
     {
         $content = $scene->getContent();
 
-        $imagesBaseUrl = $this->getParameter('app.images.base_url');
-        if (null !== $scene->getContentImage() && null !== $scene->getContentImage()->getName()) {
-            $imageUrl = $imagesBaseUrl.'/'.$scene->getContentImage()->getName();
-            $pattern = '@\{{2}\s*contentImage\s*\}{2}@';
-            $content = preg_replace($pattern, $imageUrl, $content);
+        if (null !== $scene->getContentImage()) {
+            $imageUrl = $this->uploaderHelper->asset($scene, 'contentImageFile');
+            if (null !== $imageUrl) {
+                $pattern = '@\{{2}\s*contentImage\s*\}{2}@';
+                $content = preg_replace($pattern, $imageUrl, $content);
+            }
         }
 
         // [reveal url url]
