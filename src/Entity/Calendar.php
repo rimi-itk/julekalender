@@ -62,6 +62,25 @@ class Calendar
     private $imageFile;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     *
+     * @var string
+     */
+    private $audio;
+
+    /**
+     * @Vich\UploadableField(mapping="audio", fileNameProperty="audio")
+     *
+     * @var File
+     */
+    private $audioFile;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $audioLoop;
+
+    /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank()
      */
@@ -175,6 +194,52 @@ class Calendar
     public function getImageFile(): ?File
     {
         return $this->imageFile;
+    }
+
+    public function getAudio(): ?string
+    {
+        return $this->audio;
+    }
+
+    public function setAudio(?string $audio): self
+    {
+        $this->audio = $audio;
+
+        return $this;
+    }
+
+    /**
+     * @param File $audioFile
+     */
+    public function setAudioFile(?File $audioFile = null)
+    {
+        $this->audioFile = $audioFile;
+
+        if (null !== $audioFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new DateTimeImmutable();
+        }
+    }
+
+    /**
+     * @return File
+     */
+    public function getAudioFile(): ?File
+    {
+        return $this->audioFile;
+    }
+
+    public function getAudioLoop(): ?bool
+    {
+        return $this->audioLoop;
+    }
+
+    public function setAudioLoop(bool $audioLoop): self
+    {
+        $this->audioLoop = $audioLoop;
+
+        return $this;
     }
 
     public function getConfiguration(): ?string

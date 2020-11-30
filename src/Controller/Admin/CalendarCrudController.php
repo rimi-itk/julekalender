@@ -13,8 +13,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -24,6 +26,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class CalendarCrudController extends AbstractCrudController
@@ -69,6 +72,15 @@ class CalendarCrudController extends AbstractCrudController
                 ->setFormTypeOptions([
                     'allow_delete' => false,
                 ]),
+            Field::new('audioFile')
+                ->onlyOnForms()
+                ->setFormType(VichFileType::class)
+                ->setFormTypeOptions([
+                    'delete_label' => 'Remove audio',
+                ]),
+            BooleanField::new('audioLoop')
+                ->setLabel('Loop audio')
+                ->onlyOnForms(),
             CollectionField::new('scenes')
                 ->setEntryIsComplex(true)
                 ->setEntryType(SceneType::class),

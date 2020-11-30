@@ -22,7 +22,7 @@
 
 {% autoescape false %}
 {% if calendar.image.name|default(false) %}
-{% set background_image = 'url(' ~ ((images_base_url ~ calendar.image.name)|json_encode(constant('JSON_UNESCAPED_SLASHES'))) ~ ')' %}
+{% set background_image = 'url(' ~ ((images_base_url ~ '/' ~ calendar.image.name)|json_encode(constant('JSON_UNESCAPED_SLASHES'))) ~ ')' %}
 .calendar {
   background-image: {{ background_image }};
   width: {{ calendar.image.dimensions[0] }}px;
@@ -60,7 +60,7 @@
 
 .scene:nth-child({{ loop.index }}) .content {
 {% if scene.image.name|default(false) %}
-	{% set background_image = 'url(' ~ ((images_base_url ~ scene.image.name)|json_encode(constant('JSON_UNESCAPED_SLASHES'))) ~ ')' %}
+	{% set background_image = 'url(' ~ ((images_base_url ~ '/' ~ scene.image.name)|json_encode(constant('JSON_UNESCAPED_SLASHES'))) ~ ')' %}
 	{{ _self.style({
 		'background-image': background_image,
 		'background-repeat': 'no-repeat',

@@ -38,6 +38,13 @@ class CalendarController extends AbstractController
             'scene_open_url_template' => $this->generateUrl('calendar_scenes_open', ['calendar' => $calendar->getId(), 'scene' => '{{ id }}']),
         ];
 
+        if ($calendar->getAudio()) {
+            $audioBaseUrl = $this->getParameter('app.audio.base_url');
+
+            $config['audio_url'] = $audioBaseUrl.'/'.$calendar->getAudio();
+            $config['audio_loop'] = $calendar->getAudioLoop();
+        }
+
         return $this->render('calendar/show.html.twig', [
             'calendar' => $calendar,
             'config' => $config,
@@ -140,7 +147,7 @@ class CalendarController extends AbstractController
 
         $imagesBaseUrl = $this->getParameter('app.images.base_url');
         if (null !== $scene->getContentImage() && null !== $scene->getContentImage()->getName()) {
-            $imageUrl = $imagesBaseUrl.$scene->getContentImage()->getName();
+            $imageUrl = $imagesBaseUrl.'/'.$scene->getContentImage()->getName();
             $pattern = '@\{{2}\s*contentImage\s*\}{2}@';
             $content = preg_replace($pattern, $imageUrl, $content);
         }

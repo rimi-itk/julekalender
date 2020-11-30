@@ -1,4 +1,4 @@
-/* global fetch */
+/* global Audio, fetch */
 import './Calendar.scss'
 
 import Scene from './component/Scene'
@@ -6,13 +6,42 @@ import React, { useEffect, useState } from 'react'
 import Alert from 'react-bootstrap/Alert'
 import Modal from 'react-bootstrap/Modal'
 
-function Calendar ({ data_url: dataUrl, scene_open_url_template: sceneOpenUrlTemplate }) {
+let audio = null
+
+function Calendar ({ data_url: dataUrl, scene_open_url_template: sceneOpenUrlTemplate, audio_url: audioUrl, audio_loop: audioLoop }) {
   const [isLoaded, setIsLoaded] = useState(false)
   const [error, setError] = useState(null)
   const [scenes, setScenes] = useState(null)
   const [content, displayContent] = useState(null)
 
+  const startAudio = () => {
+    if (audioUrl) {
+      const audioTarget = document.querySelector('.calendar')
+      const playAudio = (event) => {
+        audio = new Audio(audioUrl)
+        audio.loop = audioLoop
+        audio.play()
+
+        audioTarget.removeEventListener('click', playAudio)
+      }
+
+      audioTarget.addEventListener('click', playAudio)
+    }
+  }
+
+  const stopAudio = () => {
+    if (audio !== null) {
+      audio.pause()
+    }
+  }
+
+  useEffect(() => {
+    stopAudio()
+  }, [content])
+
   const openDoor = id => {
+    stopAudio()
+
     const url = sceneOpenUrlTemplate.replace('{{ id }}', id)
     fetch(url, { method: 'PATCH' })
       .then(res => res.json())
@@ -34,6 +63,8 @@ function Calendar ({ data_url: dataUrl, scene_open_url_template: sceneOpenUrlTem
   }
 
   useEffect(() => {
+    startAudio()
+
     fetch(dataUrl)
       .then(res => res.json())
       .then(
