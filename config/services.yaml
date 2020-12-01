@@ -7,6 +7,8 @@ parameters:
     app.images.base_url: '/uploads/images'
     app.audio.base_url: '/uploads/audio'
 
+    site_name: 'Julekalender'
+
 services:
     # default configuration for services in *this* file
     _defaults:
