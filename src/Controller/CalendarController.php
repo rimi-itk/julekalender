@@ -15,6 +15,9 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
+/**
+ * @Route(priority=-10)
+ */
 class CalendarController extends AbstractController
 {
     /** @var UploaderHelper */
@@ -26,7 +29,7 @@ class CalendarController extends AbstractController
     }
 
     /**
-     * @Route("/{slug}", name="calendar_show", requirements={"slug": "^(?!admin|login|logout)[^/]+"})
+     * @Route("/{slug}", name="calendar_show")
      */
     public function show(Calendar $calendar): Response
     {
@@ -47,7 +50,7 @@ class CalendarController extends AbstractController
     }
 
     /**
-     * @Route("/{slug}/styles", name="calendar_styles", requirements={"slug": "^(?!admin|login|logout)[^/]+"})
+     * @Route("/{slug}/styles", name="calendar_styles")
      */
     public function styles(Calendar $calendar): Response
     {
@@ -60,7 +63,7 @@ class CalendarController extends AbstractController
     }
 
     /**
-     * @Route("/{slug}/scenes", name="calendar_scenes", requirements={"slug": "^(?!admin|login|logout)[^/]+"})
+     * @Route("/{slug}/scenes", name="calendar_scenes")
      */
     public function scenes(Calendar $calendar, SerializerInterface $serializer): Response
     {
