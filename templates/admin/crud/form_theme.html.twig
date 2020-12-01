@@ -1,0 +1,98 @@
+{% extends '@EasyAdmin/crud/form_theme.html.twig' %}
+
+{% block vich_file_widget %}
+    <div class="ea-vich-file">
+        {% if download_uri|default('') is not empty %}
+            {% set download_title = download_uri|split('/')|last ?: 'download'|trans({}, 'VichUploaderBundle') %}
+            {% set file_extension = download_uri|split('.')|last %}
+            {% set extension_icons = {
+                'gif': 'fa-file-image-o',
+                'jpg': 'fa-file-image-o',
+                'pdf': 'fa-file-pdf-o',
+                'png': 'fa-file-image-o',
+                'zip': 'fa-file-archive-o'
+            } %}
+            <a class="ea-vich-file-name" href="{{ asset(download_uri) }}">
+                <i class="fa fa-fw {{ extension_icons[file_extension] ?? 'fa-file-o' }}"></i>
+                {{ download_title }}
+            </a>
+        {% endif %}
+
+        {% set file_upload_js %}
+            var newFile = document.getElementById('{{ form.file.vars.id }}').files[0];
+            var fileSizeInMegabytes = newFile.size > 1024 * 1024;
+            var fileSize = fileSizeInMegabytes ? newFile.size / (1024 * 1024) : newFile.size / 1024;
+            document.getElementById('{{ form.file.vars.id }}_new_file_name').innerText = newFile.name + ' (' + fileSize.toFixed(2) + ' ' + (fileSizeInMegabytes ? 'MB' : 'KB') + ')';
+        {% endset %}
+
+        <div class="ea-vich-file-actions">
+            {# the container element is needed to allow customizing the <input type="file" /> #}
+            <div class="btn btn-secondary input-file-container">
+                <i class="fa fa-fw fa-upload"></i> {{ 'action.choose_file'|trans({}, 'EasyAdminBundle') }}
+                {{ form_widget(form.file, { 'attr': { 'onchange': file_upload_js }, vich: true}) }}
+            </div>
+
+            {% if form.delete is defined %}
+                {# Use delete_label #}
+                {{ form_row(form.delete, { label: ea_crud_form.ea_field.formTypeOptions.delete_label|default('form.label.delete'|trans({}, 'VichUploaderBundle')) }) }}
+            {% endif %}
+        </div>
+        <div class="small" id="{{ form.file.vars.id }}_new_file_name"></div>
+    </div>
+{% endblock %}
+
+{% block vich_image_widget %}
+    {% set formTypeOptions = ea_crud_form.ea_field.formTypeOptions|default('') %}
+    <div class="ea-vich-image">
+        {% if image_uri|default('') is not empty %}
+            {% if download_uri|default('') is empty %}
+                <div class="ea-lightbox-thumbnail">
+                    {% if formTypeOptions.imagine_pattern is defined and formTypeOptions.imagine_pattern is not empty %}
+                        <img style="cursor: initial" src="{{ asset(image_uri)|ea_apply_filter_if_exists('imagine_filter', formTypeOptions.imagine_pattern) }}">
+                    {% else %}
+                        <img style="cursor: initial" src="{{ asset(image_uri) }}">
+                    {% endif %}
+                </div>
+            {% else %}
+                {% set _lightbox_id = 'ea-lightbox-' ~ id %}
+
+                <a href="#" class="ea-lightbox-thumbnail" data-featherlight="#{{ _lightbox_id }}" data-featherlight-close-on-click="anywhere">
+                    {% if formTypeOptions.imagine_pattern is defined and formTypeOptions.imagine_pattern is not empty %}
+                        <img src="{{ asset(download_uri)|ea_apply_filter_if_exists('imagine_filter', formTypeOptions.imagine_pattern) }}">
+                    {% else %}
+                        <img src="{{ asset(download_uri) }}">
+                    {% endif %}
+                </a>
+
+                <div id="{{ _lightbox_id }}" class="ea-lightbox">
+                    {% if formTypeOptions.imagine_pattern is defined and formTypeOptions.imagine_pattern is not empty %}
+                        <img src="{{ asset(download_uri)|ea_apply_filter_if_exists('imagine_filter', formTypeOptions.imagine_pattern) }}">
+                    {% else %}
+                        <img src="{{ asset(download_uri) }}">
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endif %}
+
+        {% set file_upload_js %}
+            var newFile = document.getElementById('{{ form.file.vars.id }}').files[0];
+            var fileSizeInMegabytes = newFile.size > 1024 * 1024;
+            var fileSize = fileSizeInMegabytes ? newFile.size / (1024 * 1024) : newFile.size / 1024;
+            document.getElementById('{{ form.file.vars.id }}_new_file_name').innerText = newFile.name + ' (' + fileSize.toFixed(2) + ' ' + (fileSizeInMegabytes ? 'MB' : 'KB') + ')';
+        {% endset %}
+
+        <div class="ea-vich-image-actions">
+            {# the container element is needed to allow customizing the <input type="file" /> #}
+            <div class="btn btn-secondary input-file-container">
+                <i class="fa fa-fw fa-upload"></i> {{ 'action.choose_file'|trans({}, 'EasyAdminBundle') }}
+                {{ form_widget(form.file, { 'attr': { 'onchange': file_upload_js }, vich: true}) }}
+            </div>
+
+            {% if form.delete is defined %}
+                {# Use delete_label #}
+                {{ form_row(form.delete, { label: ea_crud_form.ea_field.formTypeOptions.delete_label|default('form.label.delete'|trans({}, 'VichUploaderBundle')) }) }}
+            {% endif %}
+        </div>
+        <div class="small" id="{{ form.file.vars.id }}_new_file_name"></div>
+    </div>
+{% endblock %}
