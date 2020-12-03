@@ -18,6 +18,7 @@ html, body {
 
 .calendar {
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 #edit-calendar {
