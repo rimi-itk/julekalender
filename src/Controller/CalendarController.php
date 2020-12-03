@@ -177,13 +177,13 @@ HTML;
 
         // YouTube videos.
         $content = preg_replace(
-            '@https://youtu.be/(?P<id>[A-Za-z0-9]+)@',
+            '@https://youtu.be/(?P<id>[A-Za-z0-9_]+)@',
             '<iframe width="560" height="315" src="https://www.youtube.com/embed/\1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
             $content
         );
 
         $content = preg_replace(
-            '@https://www.youtube.com/watch\?v=(?P<id>[A-Za-z0-9]+)@',
+            '@https://www.youtube.com/watch\?v=(?P<id>[A-Za-z0-9_]+)@',
             '<iframe width="560" height="315" src="https://www.youtube.com/embed/\1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
             $content
         );
