@@ -54,6 +54,17 @@ class CalendarCrudController extends AbstractCrudController
         return parent::edit($context);
     }
 
+    public function delete(AdminContext $context)
+    {
+        $this->denyAccessUnlessGranted(
+            CalendarVoter::EDIT,
+            $context->getEntity()->getInstance(),
+            'You do not have permission to delete this calendar.'
+        );
+
+        return parent::delete($context);
+    }
+
     public function configureCrud(Crud $crud): Crud
     {
         return $crud->setFormThemes([
@@ -105,6 +116,7 @@ class CalendarCrudController extends AbstractCrudController
 
         return $actions
             ->update(Crud::PAGE_INDEX, Action::EDIT, fn (Action $action) => $action->displayIf(fn (Calendar $calendar) => $this->isGranted(CalendarVoter::EDIT, $calendar)))
+            ->update(Crud::PAGE_INDEX, Action::DELETE, fn (Action $action) => $action->displayIf(fn (Calendar $calendar) => $this->isGranted(CalendarVoter::EDIT, $calendar)))
             ->add(Crud::PAGE_INDEX, $show)
             ->add(Crud::PAGE_EDIT, $show)
             ->add(Crud::PAGE_EDIT, $layOut);
