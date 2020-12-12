@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Calendar;
 use App\Entity\Scene;
+use App\Security\Voter\CalendarVoter;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -79,24 +80,23 @@ class CalendarController extends AbstractController
     public function scenesOpen(Calendar $calendar, Scene $scene, EntityManagerInterface $entityManager, SerializerInterface $serializer, TranslatorInterface $translator): Response
     {
         $now = new DateTimeImmutable();
-        if (null === $this->getUser()) {
-            if ($scene->getDoNotOpenUntil() && $now < $scene->getDoNotOpenUntil()) {
-                // @see https://jsonapi.org/examples/#error-objects
-                return new JsonResponse(
-                    [
-                        'errors' => [
-                            [
-                                'status' => Response::HTTP_BAD_REQUEST,
-                                'title' => $translator->trans('You have to wait …'),
-                                'detail' => $translator->trans('This door cannot be opened until %do_not_open_until%', [
-                                    '%do_not_open_until%' => $scene->getDoNotOpenUntil()->format(DateTimeImmutable::ATOM),
-                                ]),
-                            ],
+        if (!$this->isGranted(CalendarVoter::EDIT, $calendar)
+            && $scene->getDoNotOpenUntil() && $now < $scene->getDoNotOpenUntil()) {
+            // @see https://jsonapi.org/examples/#error-objects
+            return new JsonResponse(
+                [
+                    'errors' => [
+                        [
+                            'status' => Response::HTTP_BAD_REQUEST,
+                            'title' => $translator->trans('You have to wait …'),
+                            'detail' => $translator->trans('This door cannot be opened until %do_not_open_until%', [
+                                '%do_not_open_until%' => $scene->getDoNotOpenUntil()->format(DateTimeImmutable::ATOM),
+                            ]),
                         ],
                     ],
-                    Response::HTTP_BAD_REQUEST
-                );
-            }
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
         }
         if (null === $scene->getOpenedAt()) {
             $scene->setOpenedAt($now);
